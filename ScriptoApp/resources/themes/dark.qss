@@ -1,0 +1,131 @@
+/* ============================================================
+   SCRIPTO DARK THEME
+   ============================================================
+
+   Palette
+   ------------------------------------------------------------
+   Background       #171717
+   Surface          #262626
+   Surface Light    #2C2C2C
+   Border           #404040
+
+   Primary Text     #E0E0E0
+   Secondary Text   #999999
+   Placeholder      #616161
+   Disabled Text    #555555
+
+   Success          #13FC13
+   Success Hover    #24FF24
+   Success Pressed  #0ED10E
+
+   Danger           #FC2C13
+   Danger Hover     #FF4530
+   Danger Pressed  #D9210D
+
+   Selection        #404040
+   Scroll Track     #1F1F1F
+   ============================================================ */
+
+
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+* {
+    font-family: "Cairo";
+}
+
+QWidget {
+    outline: none;
+}
+
+QScrollBar::vertical {
+    background-color: #1F1F1F;
+    width: 11px;
+    margin: 0px;
+    border-radius: 15px;
+}
+
+QScrollBar::handle::vertical {
+    background-color: #13FC13;
+    min-height: 10px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle::vertical:hover {
+    background-color: #13FC5D;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::add-page:vertical {
+    background: #1F1F1F
+}
+
+QCheckBox {
+    color: #E0E0E0;
+    font-size: 14px;
+    spacing: 8px;
+}
+
+QCheckBox::indicator {
+    border: 1px solid #13FC13;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #15FC13;
+}
+
+QCheckBox::indicator:hover {
+    background-color: #262626;
+}
+
+QComboBox {
+    background-color: #262626;
+    color: #E0E0E0;
+    border: none;
+    border-radius: 3px;
+    padding-left: 10px;
+    padding-right: 8px;
+    min-width: 60px;
+    height: 30px;
+    font-family: "Cairo"; 
+}
+
+QComboBox:editable {
+    selection-color: #404040;
+    selection-background-color: #262626;
+    border-radius: 10px;
+    padding: 4px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    border: none;
+    background: transparent;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url('resources/icons/downarrow.png');
+    width: 15px;
+    height: 15px;
+    right: 5px;
+    border-radius: 10px;
+}
+
+QComboBox QAbstractItemView {
+    selection-color: #ffffff;
+    selection-background-color: #404040;
+    font-family: "Cairo"; 
+}
+
+QComboBox QAbstractItemView::item {
+    font-size: 18px;
+}
