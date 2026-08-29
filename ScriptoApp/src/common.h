@@ -52,3 +52,24 @@
 				else \
 					qDebug() << "Failed to open theme file '" << path << "'"; \
 			}
+
+/* requires a memeber variable of type QPoint, pass the name of the this variable to the macro */
+#define SCRIPTO_WIDGET_DRAG_IMPL(offset) \
+			void mousePressEvent(QMouseEvent* e) override \
+			{ \
+				if (e->button() == Qt::LeftButton) \
+				{ \
+					offset = e->globalPosition().toPoint() - frameGeometry().topLeft(); \
+					e->accept(); \
+				} \
+			} \
+			\
+			void mouseMoveEvent(QMouseEvent* e) override \
+			{ \
+				if (e->buttons() & Qt::LeftButton) \
+				{ \
+					move(e->globalPosition().toPoint() - offset); \
+					e->accept(); \
+				} \
+			}
+

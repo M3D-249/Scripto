@@ -1,7 +1,7 @@
 #include <qapplication.h>
 #include "terminal.h"
 
-namespace Scripto
+namespace ScriptoApp
 {
 	TerminalWindow::TerminalWindow(QWidget* parent) : QWidget(parent)
 	{
@@ -28,13 +28,14 @@ namespace Scripto
 		move(x, y);
 
 		// terminal output
-		_outputText = new QTextEdit(this);
+		_outputText = new QPlainTextEdit(this);
 		_outputText->setReadOnly(true);
 		_outputText->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		_outputText->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		_outputText->setMinimumHeight(155);
 		_outputText->setMinimumWidth(365);
-		_outputText->setStyleSheet("background-color: #262626; color: #E0E0E0; border-radius: 5px; padding: 3px; font-size: 12px; ");
+		_outputText->setProperty("styleTag", "primaryTextArea");
+		_outputText->setProperty("state", "enabled");
 		
 		/// TEST:
 		Print("Hellow", Qt::green);
@@ -53,13 +54,15 @@ namespace Scripto
 
 		// terminal input
 		_inputLabel = new QLabel("Input");
-		_inputLabel->setStyleSheet("color: #E0E0E0; font-size: 14px");
+		_inputLabel->setProperty("styleTag", "primaryLabel");
+		_inputLabel->setProperty("state", "enabled");
 
 		_inputLineEdit = new QLineEdit(this);
 		_inputLineEdit->setFixedHeight(30);
 		_inputLineEdit->setMinimumWidth(310);
 		_inputLineEdit->setPlaceholderText("Input Args...");
-		_inputLineEdit->setStyleSheet("background-color: #262626; color: #E0E0E0; border-radius: 5px; padding: 3px; font-size: 14px; ");
+		_inputLineEdit->setProperty("styleTag", "primaryLineEdit");
+		_inputLineEdit->setProperty("state", "enabled");
 
 		QHBoxLayout* inputLayout = new QHBoxLayout;
 		inputLayout->addWidget(_inputLabel);

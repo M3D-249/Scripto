@@ -13,13 +13,14 @@
 int main(int argc, char** argv)
 {
 	QApplication app(argc, argv);
+	Scripto::Init("Scripto", "M3D-249");
 
-	Scripto::ScriptoMainWindow mainwindow;
-	Scripto::TerminalWindow terminal;
-	Scripto::NewScriptDialogWindow dialog;
-	dialog.show();
-	terminal.show();
+	ScriptoApp::ScriptoMainWindow mainwindow;
+	ScriptoApp::TerminalWindow terminal;
+	ScriptoApp::NewScriptDialogWindow dialog;
+	//dialog.show();
+	//terminal.show();
 	mainwindow.show();
-	
+
 	return app.exec();
 }

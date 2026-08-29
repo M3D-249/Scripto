@@ -2,7 +2,7 @@
 
 #include "mainwindow.h"
 
-namespace Scripto
+namespace ScriptoApp
 {
 	ScriptoMainWindow::ScriptoMainWindow(QWidget* parent) : QWidget(parent)
 	{
@@ -28,11 +28,12 @@ namespace Scripto
 
 		// title & search bar
 		_title = new QLabel("Scripto", this);
-		_title->setStyleSheet("color: #E0E0E0; font-size: 14px");
+		_title->setProperty("styleTag", "windowTitle");
+
 		_searchBar = new QLineEdit(this);
-		_searchBar->setFixedHeight(30);
 		_searchBar->setPlaceholderText("Run Script...");
-		_searchBar->setStyleSheet("background-color: #262626; color: #E0E0E0; border-radius: 5px; padding: 6px; font-size: 14px; ");
+		_searchBar->setProperty("styleTag", "primaryLineEdit");
+		_searchBar->setProperty("state", "enabled");
 
 		QVBoxLayout* layout = new QVBoxLayout(this);
 		layout->addWidget(_title);

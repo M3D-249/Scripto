@@ -9,10 +9,12 @@
 #include <qpainter.h>
 #include <qpainterpath.h>
 #include <qtextedit.h>
+#include <qevent.h>
+#include <qplaintextedit.h>
 
 #include "common.h"
 
-namespace Scripto
+namespace ScriptoApp
 {
 	class TerminalWindow : public QWidget
 	{
@@ -30,12 +32,14 @@ namespace Scripto
 
 	protected:
 		SCRIPTO_WIDGET_PAINT_EVENT_IMPL
+		SCRIPTO_WIDGET_DRAG_IMPL(_dragOffset)
 	private:
 		QScreen* _screen;
-		QTextEdit* _outputText;
+		QPlainTextEdit* _outputText;
 		QLineEdit* _inputLineEdit;
 		QLabel* _inputLabel;
 		const int _width = 380;
 		const int _height = 210;
+		QPoint _dragOffset;
 	};
 }

@@ -16,7 +16,7 @@
 
 #include "common.h"
 
-namespace Scripto
+namespace ScriptoApp
 {
 	class NewScriptDialogWindow : public QWidget
 	{
@@ -36,9 +36,15 @@ namespace Scripto
 		QString scriptPath() const;
 
 	protected:
-		SCRIPTO_WIDGET_PAINT_EVENT_IMPL
+		void onInplaceCheckBoxStateChange(bool checked);
+		void onCancelButtonPressed();
 
+		SCRIPTO_WIDGET_PAINT_EVENT_IMPL
+		SCRIPTO_WIDGET_DRAG_IMPL(_dragOffset)
 	private:
+		/* forces qt to re-evaluate all qss properties, called whenever custom properties are changed at runtime */
+		void RefreshStyle(QWidget* widget);
+
 		QScreen* _screen;
 		QLabel* _title;
 		QLabel* _scriptNameLabel;
@@ -55,5 +61,6 @@ namespace Scripto
 		QPushButton* _saveBtn;
 		const int _width = 500;
 		const int _height = 350;
+		QPoint _dragOffset;
 	};
 }

@@ -3,7 +3,7 @@
 #include "newscriptdialog.h"
 #include "common.h"
 
-namespace Scripto
+namespace ScriptoApp
 {
 	NewScriptDialogWindow::NewScriptDialogWindow(QWidget* parent) : QWidget(parent)
 	{
@@ -21,18 +21,20 @@ namespace Scripto
 		
 		// window title
 		_title = new QLabel("New Script Dialog");
-		_title->setStyleSheet("color: #E0E0E0; font-size: 14px");
+		_title->setProperty("styleTag", "windowTitle");
 
 		// script name
 		_scriptNameLabel = new QLabel("Script Name");
-		_scriptNameLabel->setFixedWidth(75);
-		_scriptNameLabel->setStyleSheet("color: #E0E0E0; font-size: 14px");
+		_scriptNameLabel->setFixedWidth(78);
+		_scriptNameLabel->setProperty("styleTag", "primaryLabel");
+		_scriptNameLabel->setProperty("state", "enabled");
 
 		_scriptNameLineEdit = new QLineEdit;
 		_scriptNameLineEdit->setFixedHeight(30);
-		_scriptNameLineEdit->setMinimumWidth(350);
+		_scriptNameLineEdit->setFixedWidth(375);
 		_scriptNameLineEdit->setPlaceholderText("Enter Script Name...");
-		_scriptNameLineEdit->setStyleSheet("background-color: #262626; color: #E0E0E0; border-radius: 5px; padding: 3px; font-size: 14px; ");
+		_scriptNameLineEdit->setProperty("styleTag", "primaryLineEdit");
+		_scriptNameLineEdit->setProperty("state", "enabled");
 
 		QHBoxLayout* scriptNameLayout = new QHBoxLayout;
 		scriptNameLayout->addWidget(_scriptNameLabel);
@@ -42,17 +44,19 @@ namespace Scripto
 		// script path
 		_scriptPathLabel = new QLabel("Script Path");
 		_scriptPathLabel->setFixedWidth(78);
-		_scriptPathLabel->setStyleSheet("color: #E0E0E0; font-size: 14px");
+		_scriptPathLabel->setProperty("styleTag", "primaryLabel");
+		_scriptPathLabel->setProperty("state", "enabled");
 
 		_scriptPathLineEdit = new QLineEdit;
 		_scriptPathLineEdit->setFixedHeight(30);
 		_scriptPathLineEdit->setMinimumWidth(280);
 		_scriptPathLineEdit->setPlaceholderText("Enter Absolute Path to Script...");
-		_scriptPathLineEdit->setStyleSheet("background-color: #262626; color: #E0E0E0; border-radius: 5px; padding: 3px; font-size: 14px; ");
+		_scriptPathLineEdit->setProperty("styleTag", "primaryLineEdit");
+		_scriptPathLineEdit->setProperty("state", "enabled");
 
 		_scriptPathBrowseBtn = new QPushButton("Browse...");
-		_scriptPathBrowseBtn->setStyleSheet("background-color: #3B783B; border-radius: 5px; padding: 5px; color: #E0E0E0; font-size: 10px");
-		_scriptPathBrowseBtn->setFixedHeight(30);
+		_scriptPathBrowseBtn->setProperty("styleTag", "paleGreenBtn");
+		_scriptPathBrowseBtn->setProperty("state", "enabled");
 
 		QHBoxLayout* scriptPathLayout = new QHBoxLayout;
 		scriptPathLayout->addWidget(_scriptPathLabel);
@@ -67,14 +71,14 @@ namespace Scripto
 		// script code
 		_scriptCodeLabel = new QLabel("Script Code");
 		_scriptCodeLabel->setFixedWidth(78);
-		_scriptCodeLabel->setStyleSheet("color: #E0E0E0; font-size: 14px");
+		_scriptCodeLabel->setProperty("styleTag", "primaryLabel");
 		
 		_scriptCodeTextEdit = new QPlainTextEdit;
 		_scriptCodeTextEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		_scriptCodeTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		_scriptCodeTextEdit->setMinimumHeight(130);
 		_scriptCodeTextEdit->setMinimumWidth(365);
-		_scriptCodeTextEdit->setStyleSheet("background-color: #262626; color: #E0E0E0; border-radius: 5px; padding: 3px; font-size: 12px; ");
+		_scriptCodeTextEdit->setProperty("styleTag", "primaryTextArea");
 
 		QHBoxLayout* scriptCodeLayout = new QHBoxLayout;
 		scriptCodeLayout->addWidget(_scriptCodeLabel);
@@ -85,13 +89,12 @@ namespace Scripto
 		// script type
 		_scriptTypeLabel = new QLabel("Script Type");
 		_scriptTypeLabel->setFixedWidth(78);
-		_scriptTypeLabel->setStyleSheet("color: #E0E0E0; font-size: 14px");
+		_scriptTypeLabel->setProperty("styleTag", "primaryLabel");
 
 		_scriptTypeComboBox = new QComboBox;
 		_scriptTypeComboBox->addItems({ "python", "bash", "shell", "lua" });
-		_scriptTypeComboBox->setStyleSheet("background-color: #262626; color: #E0E0E0; border-radius: 5px; padding: 3px; font-size: 12px; ");
+		_scriptTypeComboBox->setProperty("styleTag", "primaryComboBox");
 		_scriptTypeComboBox->setMinimumWidth(50);
-
 
 		QHBoxLayout* scriptTypeLayout = new QHBoxLayout;
 		scriptTypeLayout->addWidget(_scriptTypeLabel);
@@ -100,14 +103,12 @@ namespace Scripto
 
 		// cancel & save buttons
 		_saveBtn = new QPushButton("Save");
-		_saveBtn->setStyleSheet("background-color: #3B783B; border-radius: 5px; padding: 5px; color: #E0E0E0; font-size: 14px");
-		_saveBtn->setFixedHeight(30);
-		_saveBtn->setFixedWidth(50);
+		_saveBtn->setProperty("styleTag", "paleGreenBtn");
+		_saveBtn->setProperty("state", "enabled");
 
 		_cancelBtn = new QPushButton("Cancel");
-		_cancelBtn->setStyleSheet("background-color: #A00303; border-radius: 5px; padding: 5px; color: #E0E0E0; font-size: 14px");
-		_cancelBtn->setFixedHeight(30);
-		_cancelBtn->setFixedWidth(50);
+		_cancelBtn->setProperty("styleTag", "darkRedBtn");
+		_cancelBtn->setProperty("state", "enabled");
 
 		QHBoxLayout* cancelAndSaveLayout = new QHBoxLayout;
 		cancelAndSaveLayout->addWidget(_saveBtn);
@@ -129,10 +130,62 @@ namespace Scripto
 		layout->addLayout(BottomLayout);
 
 		layout->setContentsMargins(20, 5, 20, 20);
-		layout->setSpacing(10);
+		layout->setSpacing(7);
 		layout->setAlignment(_title, Qt::AlignCenter);
 
 		SetTheme(true);
+
+		// disable by default
+		_scriptCodeTextEdit->setEnabled(false);
+		_scriptCodeTextEdit->setProperty("state", "disabled");
+		_scriptTypeComboBox->setEnabled(false);
+		_scriptTypeComboBox->setProperty("state", "disabled");
+		_scriptCodeLabel->setProperty("state", "disabled");
+		_scriptTypeLabel->setProperty("state", "disabled");
+
+		// events
+		connect(_inplaceCheckBox, &QCheckBox::checkStateChanged, this, &NewScriptDialogWindow::onInplaceCheckBoxStateChange);
+		connect(_cancelBtn, &QPushButton::pressed, this, &NewScriptDialogWindow::onCancelButtonPressed);
+	}
+
+	void NewScriptDialogWindow::onInplaceCheckBoxStateChange(bool checked)
+	{
+		_scriptCodeTextEdit->setEnabled(checked);
+		_scriptCodeTextEdit->setProperty("state", checked ? "enabled" : "disabled");
+		RefreshStyle(_scriptCodeTextEdit);
+		
+		_scriptTypeComboBox->setEnabled(checked);
+		_scriptTypeComboBox->setProperty("state", checked ? "enabled" : "disabled");
+		RefreshStyle(_scriptTypeComboBox);
+		
+		_scriptCodeLabel->setProperty("state", checked ? "enabled" : "disabled");
+		RefreshStyle(_scriptCodeLabel);
+		
+		_scriptTypeLabel->setProperty("state", checked ? "enabled" : "disabled");
+		RefreshStyle(_scriptTypeLabel);
+
+		_scriptPathLabel->setProperty("state", checked ? "disabled" : "enabled");
+		RefreshStyle(_scriptPathLabel);
+
+		_scriptPathLineEdit->setEnabled(!checked);
+		_scriptPathLineEdit->setProperty("state", checked ? "disabled" : "enabled");
+		RefreshStyle(_scriptPathLineEdit);
+
+		_scriptPathBrowseBtn->setEnabled(!checked);
+		_scriptPathBrowseBtn->setProperty("state", checked ? "disabled" : "enabled");
+		RefreshStyle(_scriptPathBrowseBtn);
+	}
+
+	void NewScriptDialogWindow::RefreshStyle(QWidget* widget)
+	{
+		widget->style()->unpolish(widget);
+		widget->style()->polish(widget);
+		widget->update();
+	}
+
+	void NewScriptDialogWindow::onCancelButtonPressed()
+	{
+		this->hide();
 	}
 
 	SCRIPTO_SET_THEME_FUNC_IMPL(NewScriptDialogWindow)

@@ -8,10 +8,11 @@
 #include <qfile.h>
 #include <qpainter.h>
 #include <qpainterpath.h>
+#include <qevent.h>
 
 #include "common.h"
 
-namespace Scripto
+namespace ScriptoApp
 {
 
 	class ScriptoMainWindow : public QWidget
@@ -26,12 +27,13 @@ namespace Scripto
 
 	protected:
 		SCRIPTO_WIDGET_PAINT_EVENT_IMPL
-
+		SCRIPTO_WIDGET_DRAG_IMPL(_dragOffset)
 	private:
 		QScreen* _screen;
 		QLineEdit* _searchBar;
 		QLabel* _title;
 		const int _width = 500;
 		const int _height = 70;
+		QPoint _dragOffset;
 	};
 }

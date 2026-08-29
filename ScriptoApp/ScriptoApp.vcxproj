@@ -33,6 +33,10 @@
   <ItemGroup>
     <None Include="resources\themes\dark.qss" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\icons\check.png" />
+    <Image Include="resources\icons\downarrow.png" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

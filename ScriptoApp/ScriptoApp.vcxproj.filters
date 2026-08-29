@@ -45,4 +45,12 @@
   <ItemGroup>
     <None Include="resources\themes\dark.qss" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\icons\check.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\downarrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
