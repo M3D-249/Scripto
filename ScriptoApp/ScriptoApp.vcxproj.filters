@@ -27,6 +27,21 @@
     <ClCompile Include="src\terminal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\schedulerwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\QHotkey-master\QHotkey\qhotkey_win.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\QHotkey-master\QHotkey\qhotkey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\QHotkey-master\QHotkey\moc_qhotkey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\QHotkey-master\QHotkey\moc_qhotkey_p.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\mainwindow.h">
@@ -41,15 +56,31 @@
     <ClInclude Include="src\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\schedulerwindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\QHotkey-master\QHotkey\qhotkey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\QHotkey-master\QHotkey\qhotkey_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\themes\dark.qss" />
+    <None Include="..\Dependencies\QHotkey-master\QHotkey\QHotkey" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\icons\check.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\icons\downarrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\cross.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\cross_filled.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

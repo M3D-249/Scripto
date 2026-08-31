@@ -15,11 +15,12 @@
 #include <qstring.h>
 #include <qprocess.h>
 
+// macros
+#define SCRIPTO_ERROR -1
+#define SCRIPTO_INVALID_PROCESS_ID -2
+
 namespace Scripto
 {
-	// macros
-#define SCRIPTO_ERROR -1
-
 	// types declarations
 	struct Script;
 
@@ -50,6 +51,20 @@ namespace Scripto
 	QString SCRIPTO_API ConfigFilePath();
 	QString SCRIPTO_API ScriptsFilePath();
 	QString SCRIPTO_API ScriptsPath();
+	QStringList SCRIPTO_API AllowedScriptsTypes();
+	QStringList SCRIPTO_API AllowedScriptsTypesFileExtentions();
+
+	// helpers
+	ScriptType SCRIPTO_API ScriptTypeFromString(const QString& str);
+	/* returns script type provide a script file extention like .py returns ScriptType::Python */
+	ScriptType SCRIPTO_API ScriptTypeFromExtentionString(const QString& str);
+	QString SCRIPTO_API ScriptTypeToString(ScriptType type);
+	RunPolicy SCRIPTO_API RunPolicyFromString(const QString& str);
+	QString SCRIPTO_API RunPolicyToString(RunPolicy rp);
+
+	// callbacks
+	void SCRIPTO_API setOnNewScriptAddedCallback(std::function<void(const QString& scriptName)> functr);
+	void SCRIPTO_API setOnScriptRemovedCallback(std::function<void(const QString& scriptName)> functr);
 
 	void SCRIPTO_API Init(const QString& appName, const QString& companyName);
 

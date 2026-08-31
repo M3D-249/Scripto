@@ -41,6 +41,8 @@ QWidget {
 QLabel[styleTag="windowTitle"] {
     color: #E0E0E0;
     font-size: 14px;
+    margin: 0;
+    padding: 0;
 }
 
 QLabel[styleTag="primaryLabel"] {
@@ -69,6 +71,12 @@ QPushButton[state="disabled"] {
     background-color: #4D4D4D;
 }
 
+QpushButton[styleTag="crossBtn"] {
+    width: 20px;
+    height: 20px;
+    image: url('resources/icons/cross.png');
+}
+
 QPushButton[styleTag="darkRedBtn"][state="enabled"] {
     background-color: #A00303;
 }
@@ -82,6 +90,7 @@ QLineEdit[styleTag="primaryLineEdit"] {
     padding: 7px;
     font-size: 14px; 
     height: 30px;
+    selection-background-color: #404040;
 }
 
 QLineEdit[styleTag="primaryLineEdit"][state="enabled"] {
@@ -95,10 +104,14 @@ QLineEdit[styleTag="primaryLineEdit"][state="disabled"] {
     color: #808080;
 }
 
+QLineEdit[styleTag="primaryLineEdit"] QAbstractItemView {
+    padding: 10px;
+}
+
 QPlainTextEdit[styleTag="primaryTextArea"] {
     border-radius: 5px;
     padding: 3px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 QPlainTextEdit[styleTag="primaryTextArea"][state="enabled"] {
@@ -109,6 +122,25 @@ QPlainTextEdit[styleTag="primaryTextArea"][state="enabled"] {
 QPlainTextEdit[styleTag="primaryTextArea"][state="disabled"] {
     background-color: #4D4D4D;
     color: #808080;
+}
+
+QListView {
+    background-color: #262626;
+    color: #E0E0E0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QListView::item {
+    padding: 8px;
+    border-radius: 5px;
+}
+
+QListView::item:hover,
+QlistView::item:selected {
+    background-color: #404040;
 }
 
 QScrollBar::vertical {
@@ -207,4 +239,28 @@ QComboBox[styleTag="primaryComboBox"] QAbstractItemView::item {
 
 QComboBox[styleTag="primaryComboBox"] QAbstractItemView::item::selected {
     padding: 7px;
+}
+QDateTimeEdit,
+QDateTimeEdit[state="enabled"] {
+    background-color: #262626;
+    color: #E0E0E0;
+    font-size: 14px;
+    border-radius: 5px;
+    height: 30;
+    width: 200;
+}
+
+QDateTimeEdit[state="disabled"] {
+    background-color: #4D4D4D;
+    color: #808080;
+}
+
+QSpinBox,
+QSpinBox[state="enabled"] {
+    background-color: #262626;
+    color: #E0E0E0;
+    font-size: 14px;
+    border-radius: 5px;
+    height: 30;
+    width: 200;
 }

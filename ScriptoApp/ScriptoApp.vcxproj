@@ -19,22 +19,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Dependencies\QHotkey-master\QHotkey\moc_qhotkey.cpp">
+      <DeploymentContent>false</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\QHotkey-master\QHotkey\moc_qhotkey_p.cpp" />
+    <ClCompile Include="..\Dependencies\QHotkey-master\QHotkey\qhotkey.cpp" />
+    <ClCompile Include="..\Dependencies\QHotkey-master\QHotkey\qhotkey_win.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mainwindow.cpp" />
     <ClCompile Include="src\newscriptdialog.cpp" />
+    <ClCompile Include="src\schedulerwindow.cpp" />
     <ClCompile Include="src\terminal.cpp" />
+    <ClCompile Include="Generated\moc_*.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Dependencies\QHotkey-master\QHotkey\qhotkey.h" />
+    <ClInclude Include="..\Dependencies\QHotkey-master\QHotkey\qhotkey_p.h" />
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\mainwindow.h" />
     <ClInclude Include="src\newscriptdialog.h" />
+    <ClInclude Include="src\schedulerwindow.h" />
     <ClInclude Include="src\terminal.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Dependencies\QHotkey-master\QHotkey\QHotkey" />
     <None Include="resources\themes\dark.qss" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\icons\check.png" />
+    <Image Include="resources\icons\cross.png" />
+    <Image Include="resources\icons\cross_filled.png" />
     <Image Include="resources\icons\downarrow.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -130,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Projects\Scripto\Scripto\src\;C:\Qt\6.11.1\msvc2022_64\include\;C:\Qt\6.11.1\msvc2022_64\include\QtCore;C:\Qt\6.11.1\msvc2022_64\include\QtGui;C:\Qt\6.11.1\msvc2022_64\include\QtWidgets</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Projects\Scripto\Scripto\src\;C:\Qt\6.11.1\msvc2022_64\include\;C:\Qt\6.11.1\msvc2022_64\include\QtCore;C:\Qt\6.11.1\msvc2022_64\include\QtGui;C:\Qt\6.11.1\msvc2022_64\include\QtWidgets;D:\Projects\Scripto\Dependencies\QHotkey-master\QHotkey;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -141,6 +155,13 @@
       <AdditionalLibraryDirectories>C:\Qt\6.11.1\msvc2022_64\lib\;$(SolutionDir)bin\$(Configuration)\;</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generate moc file for QObjects</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -151,16 +172,23 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\Projects\Scripto\Scripto\src\;C:\Qt\6.11.1\msvc2022_64\include\;C:\Qt\6.11.1\msvc2022_64\include\QtCore;C:\Qt\6.11.1\msvc2022_64\include\QtGui;C:\Qt\6.11.1\msvc2022_64\include\QtWidgets</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Projects\Scripto\Scripto\src\;C:\Qt\6.11.1\msvc2022_64\include\;C:\Qt\6.11.1\msvc2022_64\include\QtCore;C:\Qt\6.11.1\msvc2022_64\include\QtGui;C:\Qt\6.11.1\msvc2022_64\include\QtWidgets;D:\Projects\Scripto\Dependencies\QHotkey-master\QHotkey;</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Qt\6.11.1\msvc2022_64\lib\;$(SolutionDir)bin\$(Configuration)\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Scripto.lib;Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Scripto.lib;Qt6Core.lib;Qt6Gui.lib;Qt6Widgets.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generate moc file for QObjects</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

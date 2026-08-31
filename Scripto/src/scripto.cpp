@@ -16,16 +16,35 @@
 
 namespace Scripto
 {
-	struct BackendConfig
-	{
-
-	} _config;
-	QJsonDocument _jconfig;
-
 #pragma region Globals
 	QMap<QString, Script> _scripts;
 	QMap<long long, QProcess*> _runningProcesses;
 	QMap<long long, QProcess*> _scheduledScripts;
+	std::function<void(const QString&)> _onNewScriptAddedCallback = nullptr;
+	std::function<void(const QString&)> _onScriptRemovedCallback = nullptr;
+
+	// constants
+	const QString SCRIPT_TYPE_PYTHON = "python";
+	const QString SCRIPT_TYPE_BASH = "bash";
+	const QString SCRIPT_TYPE_EXE = "exe";
+	const QString SCRIPT_TYPE_NONE = "none";
+	const QString SCRIPT_TYPE_PYTHON_EXTENTION = ".py";
+	const QString SCRIPT_TYPE_BASH_EXTENTION = ".sh";
+	const QString SCRIPT_TYPE_EXE_EXTENTION = ".exe";
+	const QString SCRIPT_TYPE_NONE_EXTENTION = "";
+
+	const  QStringList ALLOWED_SCRIPTS_TYPES_NAMES = { 
+		SCRIPT_TYPE_PYTHON,
+		SCRIPT_TYPE_BASH,
+		SCRIPT_TYPE_EXE,
+		SCRIPT_TYPE_NONE 
+	};
+	const  QStringList ALLOWED_SCRIPTS_TYPES_EXTENTIONS = { 
+		SCRIPT_TYPE_PYTHON_EXTENTION,
+		SCRIPT_TYPE_BASH_EXTENTION,
+		SCRIPT_TYPE_EXE_EXTENTION,
+		SCRIPT_TYPE_NONE_EXTENTION
+	};
 #pragma endregion
 
 #pragma region Initialization
@@ -33,16 +52,13 @@ namespace Scripto
 	{
 		QCoreApplication::setApplicationName(appName);
 		QCoreApplication::setOrganizationDomain(orgName);
+		LoadScripts();
 	}
 #pragma endregion
 
 #pragma region Local Functions Declarations
 	bool IsScriptAvalible(const QString& name);
 	QString GetScriptID(const QString& scriptName);
-	ScriptType ScriptTypeFromString(const QString& str);
-	QString ScriptTypeToString(ScriptType type);
-	RunPolicy RunPolicyFromString(const QString& str);
-	QString RunPolicyToString(RunPolicy rp);
 	QJsonDocument LoadJsonFile(const QString& path);
 	bool SaveJsonFile(const QJsonDocument& source, const QString& destination);
 	QJsonObject ScriptToJson(const Script& script);
@@ -67,42 +83,6 @@ namespace Scripto
 		while (id.endsWith("-"))
 			id.removeLast();
 		return id;
-	}
-
-	ScriptType ScriptTypeFromString(const QString& str)
-	{
-		if (str == "python") return ScriptType::Python;
-		else if (str == "exe") return ScriptType::Executable;
-		else if (str == "bash") return ScriptType::Bash;
-		else return ScriptType::None;
-	}
-
-	QString ScriptTypeToString(ScriptType type)
-	{
-		switch (type)
-		{
-		case Scripto::ScriptType::None: return "none";
-		case Scripto::ScriptType::Python: return "python";
-		case Scripto::ScriptType::Bash: return "bash";
-		case Scripto::ScriptType::Executable: return "exe";
-		default: return "none";
-		}
-	}
-
-	RunPolicy RunPolicyFromString(const QString& str)
-	{
-		if (str == "admin") return RunPolicy::Administrator;
-		else return RunPolicy::NormalUser;
-	}
-
-	QString RunPolicyToString(RunPolicy rp)
-	{
-		switch (rp)
-		{
-		case Scripto::RunPolicy::Administrator: return "admin";
-		case Scripto::RunPolicy::NormalUser:
-		default: return "normal";
-		}
 	}
 
 	QJsonDocument LoadJsonFile(const QString& path)
@@ -186,6 +166,62 @@ namespace Scripto
 #pragma endregion
 
 #pragma region Public API Functions Definitions
+
+	QStringList AllowedScriptsTypes()
+	{
+		return ALLOWED_SCRIPTS_TYPES_NAMES;
+	}
+
+	QStringList AllowedScriptsTypesFileExtentions()
+	{
+		return ALLOWED_SCRIPTS_TYPES_EXTENTIONS;
+	}
+
+	ScriptType ScriptTypeFromString(const QString& str)
+	{
+		if (str == SCRIPT_TYPE_PYTHON) return ScriptType::Python;
+		else if (str == SCRIPT_TYPE_EXE) return ScriptType::Executable;
+		else if (str == SCRIPT_TYPE_BASH) return ScriptType::Bash;
+		else return ScriptType::None;
+	}
+
+	ScriptType ScriptTypeFromExtentionString(const QString& str)
+	{
+		if (str == SCRIPT_TYPE_PYTHON_EXTENTION) return ScriptType::Python;
+		else if (str == SCRIPT_TYPE_EXE_EXTENTION) return ScriptType::Executable;
+		else if (str == SCRIPT_TYPE_BASH_EXTENTION) return ScriptType::Bash;
+		else if (str == SCRIPT_TYPE_NONE_EXTENTION) return ScriptType::None;
+		else return ScriptType::None;
+	}
+
+	QString ScriptTypeToString(ScriptType type)
+	{
+		switch (type)
+		{
+		case Scripto::ScriptType::None: return SCRIPT_TYPE_NONE;
+		case Scripto::ScriptType::Python: return SCRIPT_TYPE_PYTHON;
+		case Scripto::ScriptType::Bash: return SCRIPT_TYPE_BASH;
+		case Scripto::ScriptType::Executable: return SCRIPT_TYPE_EXE;
+		default: return SCRIPT_TYPE_NONE;
+		}
+	}
+
+	RunPolicy RunPolicyFromString(const QString& str)
+	{
+		if (str == "admin") return RunPolicy::Administrator;
+		else return RunPolicy::NormalUser;
+	}
+
+	QString RunPolicyToString(RunPolicy rp)
+	{
+		switch (rp)
+		{
+		case Scripto::RunPolicy::Administrator: return "admin";
+		case Scripto::RunPolicy::NormalUser:
+		default: return "normal";
+		}
+	}
+
 	QStringList GetStoredScriptsNames() // TODO: make global variable to hold a list of scripts names
 	{
 		QStringList names;
@@ -194,6 +230,16 @@ namespace Scripto
 			names.append(script.name);
 		}
 		return names;
+	}
+
+	void setOnNewScriptAddedCallback(std::function<void(const QString& scriptName)> functr)
+	{
+		_onNewScriptAddedCallback = functr;
+	}
+
+	void setOnScriptRemovedCallback(std::function<void(const QString& scriptName)> functr)
+	{
+		_onScriptRemovedCallback = functr;
 	}
 
 	int LoadScripts()
@@ -225,6 +271,8 @@ namespace Scripto
 		script.type = type;
 		script.runPolicy = runPolicy;
 
+		_onNewScriptAddedCallback(script.name);
+
 		return SaveScript(script);
 	}
 
@@ -240,10 +288,10 @@ namespace Scripto
 		default:
 		case Scripto::ScriptType::None: break;
 #if _WIN32
-		case Scripto::ScriptType::Executable: filePath += ".exe"; break;
+		case Scripto::ScriptType::Executable: filePath += SCRIPT_TYPE_EXE_EXTENTION; break;
 #endif
-		case Scripto::ScriptType::Python: filePath += ".py"; break;
-		case Scripto::ScriptType::Bash: filePath += ".sh"; break;
+		case Scripto::ScriptType::Python: filePath += SCRIPT_TYPE_PYTHON_EXTENTION; break;
+		case Scripto::ScriptType::Bash: filePath += SCRIPT_TYPE_BASH_EXTENTION; break;
 		}
 
 		QFile file(filePath);
@@ -259,9 +307,16 @@ namespace Scripto
 		script.id = GetScriptID(name);
 		script.name = name;
 		script.path = filePath;
-		script.workingDir = workingDir;
+		
+		if (workingDir == ".")
+			script.workingDir = ScriptsPath();
+		else
+			script.workingDir = workingDir;
+
 		script.type = type;
 		script.runPolicy = runPolicy;
+
+		_onNewScriptAddedCallback(script.name);
 
 		return SaveScript(script);
 	}
@@ -292,6 +347,7 @@ namespace Scripto
 		root["scripts"] = scriptsArray;
 		doc.setObject(root);
 		
+		_onScriptRemovedCallback(script.name);
 		qDebug() << "Script removed successfuly: " << script.name;
 
 		return SaveJsonFile(doc, ScriptsFilePath());
@@ -303,13 +359,14 @@ namespace Scripto
 		{
 			const auto& script = _scripts[GetScriptID(name)];
 			QString cmd = "";
+			QString args = "";
 			switch (script.type)
 			{
 			default:
 			case Scripto::ScriptType::None:
-			case Scripto::ScriptType::Executable: break;
-			case Scripto::ScriptType::Python: cmd = "python"; break;
-			case Scripto::ScriptType::Bash: cmd = "bash"; break;
+			case Scripto::ScriptType::Executable: cmd = script.path; break;
+			case Scripto::ScriptType::Python: cmd = "python"; args = script.path; break;
+			case Scripto::ScriptType::Bash: cmd = "bash"; args = script.path; break;
 			}
 
 			QProcess* process = new QProcess;
@@ -325,18 +382,19 @@ namespace Scripto
 				QString error = QString::fromUtf8(process->readAllStandardError());
 				onError(error);
 			});
+			QObject::connect(process, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
+ 				// handle this properly
+				qDebug() << "Failed to start process to execute script with name: " << script.name << ", cmd = " << cmd << ", error: " << err; 
+			});
 
 			if (!script.workingDir.isEmpty())
-				if (script.workingDir == ".") // run in the same directory as the script file
-				{
-					QString cwd = script.path.chopped(script.path.length() - script.path.lastIndexOf("/") - 1);
-					qDebug() << "script file name length" << cwd;
-					process->setWorkingDirectory(cwd);
-				}
-				else if (QDir().exists(script.workingDir))
+				if (QFileInfo(script.workingDir).exists() && QFileInfo(script.workingDir).isDir())
 					process->setWorkingDirectory(script.workingDir);
+				else
+					qDebug() << "script working dir doesn't exist please update. Script Name: " << script.name << ", Working Dir: " << script.workingDir;
 				
-			process->start(cmd, { script.path });
+			process->start(cmd, args.isEmpty() ? QStringList{} : QStringList{ args });
+
 			_runningProcesses[process->processId()] = process;
 			return process->processId();
 		}
@@ -357,6 +415,8 @@ namespace Scripto
 		QTimer::singleShot(msTime, [=]() {
 			RunScript(name, onOutput, onError, onFinish);
 		});
+		
+		return true;
 	}
 	bool ScheduleScript(const QString& name, long long afterPeriod, std::function<void(const QString&)> onOutput, std::function<void(const QString&)> onError, std::function<void(QProcess::ExitStatus)> onFinish)
 	{
@@ -371,6 +431,8 @@ namespace Scripto
 		QTimer::singleShot(ms, [=]() {
 			RunScript(name, onOutput, onError, onFinish);
 		});
+
+		return true;
 	}
 
 	bool WriteInputToProcess(long long processID, const QString& input)

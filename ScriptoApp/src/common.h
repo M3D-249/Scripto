@@ -11,11 +11,19 @@
 #include <qpainter.h>
 #include <qpainterpath.h>
 
+/* custom paint function to draw frameless widgets with round corners */
 #define SCRIPTO_WIDGET_INIT \
 			setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint); \
 			setAttribute(Qt::WA_TranslucentBackground); \
 			setStyleSheet("padding: 0; margin: 0;");
 
+/* takes a pointer to QWidget */
+#define SCRIPTO_WIDGET_INIT_OBJ(widget) \
+			widget->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint); \
+			widget->setAttribute(Qt::WA_TranslucentBackground); \
+			widget->setStyleSheet("padding: 0; margin: 0;");
+
+/* custom paint function to draw frameless widgets with round corners */
 #define SCRIPTO_WIDGET_PAINT_EVENT_IMPL \
 			void paintEvent(QPaintEvent* event) override \
 			{ \
@@ -41,6 +49,7 @@
 				painter.drawRoundedRect(rect(), radius, radius); \
 			}
 
+/* alows for light/dark theme changing */
 #define SCRIPTO_SET_THEME_FUNC_DECL void SetTheme(bool dark);
 #define SCRIPTO_SET_THEME_FUNC_IMPL(class_name) \
 			void class_name::SetTheme(bool dark) \
@@ -73,3 +82,12 @@
 				} \
 			}
 
+/* forces qt to re-evaluate all qss properties, called whenever custom properties are changed at runtime */
+#define SCRIPTO_REFRESH_STYLE_FUNC_DECL void RefreshStyle(QWidget* widget);
+#define SCRIPTO_REFRESH_STYLE_FUNC_IMPL(className) \
+				void className::RefreshStyle(QWidget* widget) \
+				{ \
+					widget->style()->unpolish(widget); \
+					widget->style()->polish(widget); \
+					widget->update(); \
+				}
