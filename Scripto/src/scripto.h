@@ -63,8 +63,12 @@ namespace Scripto
 	QString SCRIPTO_API RunPolicyToString(RunPolicy rp);
 
 	// callbacks
-	void SCRIPTO_API setOnNewScriptAddedCallback(std::function<void(const QString& scriptName)> functr);
-	void SCRIPTO_API setOnScriptRemovedCallback(std::function<void(const QString& scriptName)> functr);
+	/* returns functr id for later unset if needed */
+	int SCRIPTO_API setOnNewScriptAddedCallback(std::function<void(const QString& scriptName)> functr);
+	/* returns functr id for later unset if needed */
+	int SCRIPTO_API setOnScriptRemovedCallback(std::function<void(const QString& scriptName)> functr);
+	void SCRIPTO_API unsetOnNewScriptAddedCallback(int id);
+	void SCRIPTO_API unsetOnScriptRemovedCallback(int id);
 
 	void SCRIPTO_API Init(const QString& appName, const QString& companyName);
 

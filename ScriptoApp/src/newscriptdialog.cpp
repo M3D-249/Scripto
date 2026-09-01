@@ -1,5 +1,19 @@
 ﻿#include <qapplication.h>
 #include <qfiledialog.h>
+#include <qscreen.h>
+#include <qlineedit.h>
+#include <qboxlayout.h>
+#include <qlabel.h>
+#include <qfile.h>
+#include <qpainter.h>
+#include <qpainterpath.h>
+#include <qpushbutton.h>
+#include <qcheckbox.h>
+#include <qtextedit.h>
+#include <qplaintextedit.h>
+#include <qcombobox.h>
+#include <qdialog.h>
+
 #include <scripto.h>
 
 #include "newscriptdialog.h"
@@ -70,14 +84,14 @@ namespace ScriptoApp
 		_scriptPathBrowseBtn->setProperty("styleTag", "paleGreenBtn");
 		_scriptPathBrowseBtn->setProperty("state", "enabled");
 
+		_scriptPathStatusLabel = new QLabel;
+		_scriptPathStatusLabel->setFixedHeight(10);
+		_scriptPathStatusLabel->setStyleSheet("color: #E0E0E0; font-size: 8px; left: 78px;"); // TODO: make .qss styling
+
 		QHBoxLayout* scriptPathEdit = new QHBoxLayout;
 		scriptPathEdit->addWidget(_scriptPathLineEdit);
 		scriptPathEdit->addWidget(_scriptPathBrowseBtn);
 		scriptPathEdit->setSpacing(7);
-
-		_scriptPathStatusLabel = new QLabel;
-		_scriptPathStatusLabel->setFixedHeight(10);
-		_scriptPathStatusLabel->setStyleSheet("color: #E0E0E0; font-size: 8px; left: 78px;"); // TODO: make .qss styling
 
 		QVBoxLayout* scriptPathEditAndStatusLayout = new QVBoxLayout;
 		scriptPathEditAndStatusLayout->addLayout(scriptPathEdit);
@@ -187,7 +201,6 @@ namespace ScriptoApp
 		layout->addLayout(scriptWorkingDirLayout);
 		layout->addWidget(_inplaceCheckBox);
 		layout->addLayout(scriptCodeLayout);
-		//layout->addLayout(BottomLayout);
 		layout->addLayout(scriptTypeLayout);
 		layout->addLayout(cancelAndSaveLayout);
 
@@ -203,7 +216,7 @@ namespace ScriptoApp
 		_scriptTypeComboBox->setEnabled(false);
 		_scriptTypeComboBox->setProperty("state", "disabled");
 
-		// events
+		// setup slots
 		connect(_scriptNameLineEdit, &QLineEdit::textChanged, this, &NewScriptDialogWindow::onScriptNameChanged);
 		connect(_scriptPathBrowseBtn, &QPushButton::pressed, this, &NewScriptDialogWindow::onScriptPathBrowseBtnClicked);
 		connect(_scriptPathLineEdit, &QLineEdit::textChanged, this, &NewScriptDialogWindow::onScriptPathChanged);
@@ -259,9 +272,7 @@ namespace ScriptoApp
 			}
 			else
 			{
-				QString msg = "File Type not allowed. allowed: { ";
-				//msg += *Scripto::AllowedScriptsTypesFileExtentions().data();
-				msg += " }.";
+				QString msg = "File Type not allowed.";
 				_scriptPathStatusLabel->setText(msg);
 				_scriptPathStatusLabel->setStyleSheet("color: red;");
 			}
@@ -348,7 +359,7 @@ namespace ScriptoApp
 			QString path = _scriptPathLineEdit->text();
 			QString scriptFileExtention = path.mid(path.lastIndexOf("."));
 			Scripto::ScriptType type = Scripto::ScriptTypeFromExtentionString(scriptFileExtention);
-
+			// add run policy or not ?
 			Scripto::AddScript(scriptName, path, workingDir, type, Scripto::RunPolicy::NormalUser);
 		}
 

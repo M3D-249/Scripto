@@ -14,9 +14,9 @@
 #include <qplaintextedit.h>
 #include <qobject.h>
 #include <qprocess.h>
-#include <scripto.h>
 #include <qpushbutton.h>
 
+#include <scripto.h>
 #include "common.h"
 
 namespace ScriptoApp
@@ -48,22 +48,26 @@ namespace ScriptoApp
 		void HideFadeOut(std::function<void()> onAnimationFinished);
 		/* closes the window and deletes it after wait time in milliseconds */
 		void ShutDown(int waitTime = 0);
-
-		// setfocus on terminal iput
+		/* setfocus on terminal input */
 		void SetFocus();
 	protected:
 		SCRIPTO_WIDGET_PAINT_EVENT_IMPL
 		SCRIPTO_WIDGET_DRAG_IMPL(_dragOffset)
-	private:
+		/* writes input to the process running by the current terminal instance */
 		void WriteInput();
 
+	private:
+		const QColor SUCCESS_COLOR = QColor(19, 252, 19);
+		const QColor ERROR_COLOR = QColor(252, 44, 19);
+		
+		/* flag for when script execution faces any errors */
 		bool _error = false;
 		long long _processID = SCRIPTO_INVALID_PROCESS_ID;
 		
 		const int _width = 386;
 		const int _height = 230;
-		const QColor SUCCESS_COLOR = QColor(19, 252, 19);
-		const QColor ERROR_COLOR = QColor(252, 44, 19);
+		
+		// UI
 		QScreen* _screen;
 		QPushButton* _closeBtn;
 		QPlainTextEdit* _outputText;

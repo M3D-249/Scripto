@@ -5,6 +5,15 @@
 #include <qpropertyanimation.h>
 #include <qabstractitemview.h>
 #include <qhotkey.h>
+#include <qfile.h>
+#include <qpainter.h>
+#include <qpainterpath.h>
+#include <qboxlayout.h>
+#include <qlineedit.h>
+#include <qlabel.h>
+#include <qevent.h>
+#include <qlist.h>
+#include <qscreen.h>
 
 #include "mainwindow.h"
 #include "scripto.h"
@@ -28,15 +37,13 @@ namespace ScriptoApp
 
 	void ScriptoMainWindow::SetupUi()
 	{
+		// widget setup
 		SCRIPTO_WIDGET_INIT
-
 		setObjectName("mainwindow");
 		setWindowTitle("Scripto");
 		setFixedWidth(_width);
 		setFixedHeight(_height);
 		setStyleSheet("padding: 0; margin: 0;");
-
-		// center the window
 		CenterPosition();
 
 		// title & search bar
@@ -56,6 +63,7 @@ namespace ScriptoApp
 
 		SetTheme(true);
 
+		// search bar auto-complete setup
 		_storedScripts = new QStringListModel(Scripto::GetStoredScriptsNames());
 		_completer = new QCompleter(this);
 		_completer->setModel(_storedScripts);
@@ -64,43 +72,49 @@ namespace ScriptoApp
 		_completer->setCompletionMode(QCompleter::PopupCompletion);
 		_searchBar->setCompleter(_completer);
 
+		// sub windows & dialogs
 		_newScriptDialog = new NewScriptDialogWindow;
-		_scheduler = new SchedulerWindow;
 		_newScriptDialog->hide();
+		_scheduler = new SchedulerWindow;
 		_scheduler->hide();
+		_removeScriptDialog = new RemoveScriptDialog;
+		_removeScriptDialog->hide();
 
-		// setup shortcuts
+		// shortcuts setup
 		_escShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
 		_newScriptDialogShortcut = new QShortcut(QKeySequence("Ctrl+N"), this);
 		_scheduleScriptShortcut = new QShortcut(QKeySequence("Ctrl+S"), this);
+		_removeScriptDialogShortcut = new QShortcut(QKeySequence("Ctrl+R"), this);
 
+		// slots setup
 		connect(_searchBar, &QLineEdit::returnPressed, this, &ScriptoMainWindow::RunScript);
 		connect(_escShortcut, &QShortcut::activated, this, [this] {
 			this->CloseFadeOut();
 			this->_searchBar->setText(""); // clear search bar
 			this->_scheduler->close();
 			this->_newScriptDialog->close();
+			this->_removeScriptDialog->CloseFadeOut();
 		});
 
 		connect(_newScriptDialogShortcut, &QShortcut::activated, this, [this] {
-			this->_newScriptDialog->show(); // TODO: add pop in animation
+			this->_newScriptDialog->show(); // TODO: add pop
 		});
 
 		connect(_scheduleScriptShortcut, &QShortcut::activated, this, [this] {
 			this->_scheduler->show(); // TODO: add pop in animation
 		});
+		connect(_removeScriptDialogShortcut, &QShortcut::activated, this, [this] {
+			this->_removeScriptDialog->ShowFadeIn(); // TODO: add pop in animation
+		});
 
 		// backend callbacks
-		Scripto::setOnNewScriptAddedCallback([=](const QString& scriptName) {
-			onNewScriptAddedCallback(scriptName);
-		});
-		Scripto::setOnScriptRemovedCallback([=](const QString& scriptName) {
-			onScriptRemovedCallback(scriptName);
-		});
+		int id1 = Scripto::setOnNewScriptAddedCallback(std::bind(&ScriptoMainWindow::onNewScriptAddedCallback, this, std::placeholders::_1));
+		int id2 = Scripto::setOnScriptRemovedCallback(std::bind(&ScriptoMainWindow::onScriptRemovedCallback, this, std::placeholders::_1));
 	}
 
 	void ScriptoMainWindow::RunScript()
 	{
+		// TODO: handle multiple terminals placing or just drag ?
 		QString scriptName = _searchBar->text();
 		TerminalWindow* terminal = new TerminalWindow(scriptName);
 	}

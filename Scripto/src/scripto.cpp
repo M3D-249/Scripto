@@ -20,8 +20,11 @@ namespace Scripto
 	QMap<QString, Script> _scripts;
 	QMap<long long, QProcess*> _runningProcesses;
 	QMap<long long, QProcess*> _scheduledScripts;
-	std::function<void(const QString&)> _onNewScriptAddedCallback = nullptr;
-	std::function<void(const QString&)> _onScriptRemovedCallback = nullptr;
+
+	std::atomic<int> _onNewScriptAddedCallbacksCounter = 0;
+	std::atomic<int> _onScriptRemovedCallbacksCounter = 0;
+	QMap<int, std::function<void(const QString&)>> _onNewScriptAddedCallbacks;
+	QMap<int, std::function<void(const QString&)>> _onScriptRemovedCallbacks;
 
 	// constants
 	const QString SCRIPT_TYPE_PYTHON = "python";
@@ -232,14 +235,30 @@ namespace Scripto
 		return names;
 	}
 
-	void setOnNewScriptAddedCallback(std::function<void(const QString& scriptName)> functr)
+	int setOnNewScriptAddedCallback(std::function<void(const QString& scriptName)> functr)
 	{
-		_onNewScriptAddedCallback = functr;
+		int id = _onNewScriptAddedCallbacksCounter++;
+		_onNewScriptAddedCallbacks[id] = functr;
+		return id;
 	}
 
-	void setOnScriptRemovedCallback(std::function<void(const QString& scriptName)> functr)
+	int setOnScriptRemovedCallback(std::function<void(const QString& scriptName)> functr)
 	{
-		_onScriptRemovedCallback = functr;
+		int id = _onScriptRemovedCallbacksCounter++;
+		_onScriptRemovedCallbacks[id] = functr;
+		return id;
+	}
+
+	void unsetOnNewScriptAddedCallback(int id)
+	{
+		if (_onNewScriptAddedCallbacks.contains(id))
+			_onNewScriptAddedCallbacks.remove(id);
+	}
+
+	void unsetOnScriptRemovedCallback(int id)
+	{
+		if (_onScriptRemovedCallbacks.contains(id))
+			_onScriptRemovedCallbacks.remove(id);
 	}
 
 	int LoadScripts()
@@ -271,7 +290,8 @@ namespace Scripto
 		script.type = type;
 		script.runPolicy = runPolicy;
 
-		_onNewScriptAddedCallback(script.name);
+		for (auto& functr : _onNewScriptAddedCallbacks)
+			functr(script.name);
 
 		return SaveScript(script);
 	}
@@ -316,7 +336,8 @@ namespace Scripto
 		script.type = type;
 		script.runPolicy = runPolicy;
 
-		_onNewScriptAddedCallback(script.name);
+		for (auto& functr : _onNewScriptAddedCallbacks)
+			functr(script.name);
 
 		return SaveScript(script);
 	}
@@ -347,7 +368,9 @@ namespace Scripto
 		root["scripts"] = scriptsArray;
 		doc.setObject(root);
 		
-		_onScriptRemovedCallback(script.name);
+		for (auto& functr : _onScriptRemovedCallbacks)
+			functr(script.name);
+
 		qDebug() << "Script removed successfuly: " << script.name;
 
 		return SaveJsonFile(doc, ScriptsFilePath());

@@ -1,19 +1,10 @@
 #pragma once
 
 #include <qwidget.h>
-#include <qscreen.h>
-#include <qlineedit.h>
-#include <qboxlayout.h>
-#include <qlabel.h>
-#include <qfile.h>
-#include <qpainter.h>
-#include <qpainterpath.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qtextedit.h>
-#include <qplaintextedit.h>
-#include <qcombobox.h>
 #include <qdialog.h>
+#include <qevent.h>
+#include <qcheckbox.h>
+#include <qplaintextedit.h>
 
 #include "common.h"
 
@@ -27,14 +18,8 @@ namespace ScriptoApp
 		/* called automaticalley when the object is created */
 		void SetupUi();
 
-		// getters
-		QString scriptName() const;
-		bool isInPlace() const;
-		QString scriptType() const;
-		QString scriptContent() const;
-		QString scriptPath() const;
-
 	protected:
+		// callbacks
 		void onScriptNameChanged(const QString& newName);
 		void onScriptPathChanged(const QString& text);
 		void onScriptWorkingDirChanged(const QString& newName);
@@ -55,7 +40,12 @@ namespace ScriptoApp
 		SCRIPTO_WIDGET_DRAG_IMPL(_dragOffset)
 	private:
 		SCRIPTO_REFRESH_STYLE_FUNC_DECL
+		
+		const int _width = 500;
+		const int _height = 450;
+		QPoint _dragOffset;
 
+		// UI
 		QScreen* _screen;
 		QLabel* _title;
 		QLabel* _scriptNameLabel;
@@ -76,8 +66,5 @@ namespace ScriptoApp
 		QComboBox* _scriptTypeComboBox;
 		QPushButton* _cancelBtn;
 		QPushButton* _saveBtn;
-		const int _width = 500;
-		const int _height = 450;
-		QPoint _dragOffset;
 	};
 }

@@ -264,3 +264,19 @@ QSpinBox[state="enabled"] {
     height: 30;
     width: 200;
 }
+
+QMessageBox {
+    background-color: #171717;
+    color: #E0E0E0;
+    font-size: 16px;
+}
+
+QMessageBox QPushButton {
+    color: #E0E0E0;
+    font-size: 12px;
+    border-radius: 5px;
+    height: 30px;
+    min-width: 60px;
+    padding: 7px;
+    background-color: #EEE;
+}

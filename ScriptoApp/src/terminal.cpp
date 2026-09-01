@@ -143,8 +143,10 @@ namespace ScriptoApp
 		else
 		{
 			PrintSuccess("Script Finished Successfully.\n");
-			PrintLine("Window Will Close Automatically after 5 seconds...");
-			QTimer::singleShot(5000, [this] { ShutDown(); }); // auto close terminal on success
+			//PrintLine("Window Will Close Automatically after 5 seconds...");
+			//QTimer::singleShot(5000, [this] { ShutDown(); }); // auto close terminal on success
+			_closeBtn->show();
+			_closeBtn->activateWindow();
 		}
 	}
 

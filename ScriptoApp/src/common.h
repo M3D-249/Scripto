@@ -47,7 +47,7 @@
 				painter.setRenderHint(QPainter::Antialiasing); \
 				painter.setBrush(backgroundColor); \
 				painter.drawRoundedRect(rect(), radius, radius); \
-			}
+			}\
 
 /* alows for light/dark theme changing */
 #define SCRIPTO_SET_THEME_FUNC_DECL void SetTheme(bool dark);
