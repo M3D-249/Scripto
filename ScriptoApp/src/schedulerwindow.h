@@ -14,6 +14,8 @@
 #include <qplaintextedit.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
+#include <qstringlistmodel.h>
+#include <qcompleter.h>
 
 #include "common.h"
 
@@ -28,29 +30,41 @@ namespace ScriptoApp
 		void SetupUi();
 
 	protected:
+		void onScriptNameChanged(const QString&);
+		void onTypeComboBoxCurrentIndexChanged(const QString&);
 		void onCancelButtonPressed();
 		void onSetButtonPressed();
+		void onRepeatCheckBoxStateChange(Qt::CheckState);
 
 		SCRIPTO_WIDGET_PAINT_EVENT_IMPL
 		SCRIPTO_WIDGET_DRAG_IMPL(_dragOffset)
 	private:
 		SCRIPTO_REFRESH_STYLE_FUNC_DECL
 
+		void UpdateUiStates(bool dateSelected);
+		void UpdateSaveBtnState();
+
+		const int _width = 350;
+		const int _height = 320;
+		QPoint _dragOffset;
+		QStringListModel* _storedScripts;
+		QCompleter* _completer;
+
+		// UI
 		QScreen* _screen;
 		QLabel* _title;
 		QLabel* _scriptNameLabel;
 		QLineEdit* _scriptNameLineEdit;
+		QLabel* _scriptNameStatusLabel;
+		QCheckBox* _repeatCheckBox;
 		QComboBox* _typeComboBox;
+		QSpinBox* _repeatsCountSpinBox; // -1 means forever 
 		QLabel* _timePeriodLabel;
 		QSpinBox* _timePeriodSpinBox;
 		QComboBox* _timeUnitComboBox;
 		QLabel* _targetDateLabel;
 		QDateTimeEdit* _targetDateEdit; // use QCalendarWidget instead
-		QCheckBox* _repeatCheckBox;
 		QPushButton* _cancelBtn;
 		QPushButton* _setBtn;
-		const int _width = 350;
-		const int _height = 230;
-		QPoint _dragOffset;
 	};
 }

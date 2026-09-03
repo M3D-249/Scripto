@@ -67,6 +67,7 @@ namespace Scripto
 	QJsonObject ScriptToJson(const Script& script);
 	Script JsonToScript(const QJsonObject& j);
 	bool SaveScript(const Script& script);
+	void SaveSchedules();
 #pragma endregion
 
 #pragma region Local Functions Definitions
@@ -393,18 +394,21 @@ namespace Scripto
 			}
 
 			QProcess* process = new QProcess;
-			QObject::connect(process, &QProcess::readyReadStandardOutput, [=] {
-				QString output = QString::fromUtf8(process->readAllStandardOutput());
-				onOutput(output);
-			});
-			QObject::connect(process, &QProcess::finished, [=] {
-				onFinish(process->exitStatus());
-				process->deleteLater();
-			});
-			QObject::connect(process, &QProcess::readyReadStandardError, [=] {
-				QString error = QString::fromUtf8(process->readAllStandardError());
-				onError(error);
-			});
+			if (onOutput)
+				QObject::connect(process, &QProcess::readyReadStandardOutput, [=] {
+					QString output = QString::fromUtf8(process->readAllStandardOutput());
+					onOutput(output);
+				});
+			if (onError)
+				QObject::connect(process, &QProcess::readyReadStandardError, [=] {
+					QString error = QString::fromUtf8(process->readAllStandardError());
+					onError(error);
+				});
+			if (onFinish)
+				QObject::connect(process, &QProcess::finished, [=] {
+					onFinish(process->exitStatus());
+					process->deleteLater();
+				});
 			QObject::connect(process, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
  				// handle this properly
 				qDebug() << "Failed to start process to execute script with name: " << script.name << ", cmd = " << cmd << ", error: " << err; 
@@ -416,6 +420,7 @@ namespace Scripto
 				else
 					qDebug() << "script working dir doesn't exist please update. Script Name: " << script.name << ", Working Dir: " << script.workingDir;
 				
+			qDebug() << "Started Running Script: " << name;
 			process->start(cmd, args.isEmpty() ? QStringList{} : QStringList{ args });
 
 			_runningProcesses[process->processId()] = process;
@@ -425,35 +430,71 @@ namespace Scripto
 		return SCRIPTO_ERROR;
 	}
 
-	bool ScheduleScript(const QString& name, const QDateTime& targetDate, std::function<void(const QString&)> onOutput, std::function<void(const QString&)> onError, std::function<void(QProcess::ExitStatus)> onFinish)
+	void RunScriptRepeatedilyScript(const QString& name,
+		long long timeperiod, int repeatsCount,
+		std::function<void(const QString& scriptName)> onExecutionStarted,
+		std::function<void(const QString&)> onOutput,
+		std::function<void(const QString&)> onError,
+		std::function<void(QProcess::ExitStatus)> onFinish)
+	{
+		int repeatsRemaining = repeatsCount - 1;
+		if (repeatsRemaining < 0)
+			return;
+
+		QTimer::singleShot(timeperiod, [=]() {
+			RunScript(name, onOutput, onError, onFinish);
+			if (onExecutionStarted)
+				onExecutionStarted(name);
+			RunScriptRepeatedilyScript(name, timeperiod, repeatsRemaining, onExecutionStarted, onOutput, onError, onFinish);
+			});
+	}
+
+	bool ScheduleScript(const QString& name,
+		const QDateTime& targetDate,
+		bool repeat, int repeatsCount,
+		std::function<void(const QString& scriptName)> onExecutionStarted, 
+		std::function<void(const QString&)> onOutput, 
+		std::function<void(const QString&)> onError, 
+		std::function<void(QProcess::ExitStatus)> onFinish)
 	{
 		/// TODO: Make it better with logs ability
 		if (!IsScriptAvalible(name))
 			return false;
 		
+		// store them in json file to run if they were not executed and to remove otherwise and keep other file to save repeated ones
 		long long msTime = QDateTime::currentDateTime().msecsTo(targetDate);
 		if (msTime < 0) // past time 
 			return false;
 
-		QTimer::singleShot(msTime, [=]() {
+		if (repeat)
+			RunScriptRepeatedilyScript(name, msTime, repeatsCount, onExecutionStarted, onOutput, onError, onFinish);
+		else
+			QTimer::singleShot(msTime, [=] {
 			RunScript(name, onOutput, onError, onFinish);
 		});
-		
+
 		return true;
 	}
-	bool ScheduleScript(const QString& name, long long afterPeriod, std::function<void(const QString&)> onOutput, std::function<void(const QString&)> onError, std::function<void(QProcess::ExitStatus)> onFinish)
+
+	bool ScheduleScript(const QString& name, long long afterPeriod,
+		bool repeat, int repeatsCount,
+		std::function<void(const QString& scriptName)> onExecutionStarted,
+		std::function<void(const QString&)> onOutput,
+		std::function<void(const QString&)> onError,
+		std::function<void(QProcess::ExitStatus)> onFinish)
 	{
 		if (!IsScriptAvalible(name))
 			return false;
 
 		if (afterPeriod < 0)
 			return false;
-		
-		long long ms = afterPeriod * 1000;
 
-		QTimer::singleShot(ms, [=]() {
+		if (repeat)
+			RunScriptRepeatedilyScript(name, afterPeriod, repeatsCount, onExecutionStarted, onOutput, onError, onFinish);
+		else
+			QTimer::singleShot(afterPeriod, [=] {
 			RunScript(name, onOutput, onError, onFinish);
-		});
+				});
 
 		return true;
 	}

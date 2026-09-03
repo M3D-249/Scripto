@@ -84,7 +84,17 @@ namespace Scripto
 	/* returns the process id on success and returns SCRIPTO_ERROR on failure */
 	long long SCRIPTO_API RunScript(const QString& scriptName, std::function<void(const QString&)> onOutput, std::function<void(const QString&)> onError, std::function<void(QProcess::ExitStatus)> onFinish);
 	/* schedules a script to be run on a given date */
-	bool SCRIPTO_API ScheduleScript(const QString& name, const QDateTime& targetDate, std::function<void(const QString&)> onOutput, std::function<void(const QString&)> onError, std::function<void(QProcess::ExitStatus)> onFinish);
+	bool SCRIPTO_API ScheduleScript(const QString& name, const QDateTime& targetDate,
+		bool repeat, int repeatsCount,
+		std::function<void(const QString& scriptName)> onExecutionStarted,
+		std::function<void(const QString&)> onOutput, 
+		std::function<void(const QString&)> onError, 
+		std::function<void(QProcess::ExitStatus)> onFinish);
 	/* schedules a script to be run after a given period of time in seconds */
-	bool SCRIPTO_API ScheduleScript(const QString& name, long long afterPeriod, std::function<void(const QString&)> onOutput, std::function<void(const QString&)> onError, std::function<void(QProcess::ExitStatus)> onFinish);
+	bool SCRIPTO_API ScheduleScript(const QString& name, long long afterPeriod, 
+		bool repeat, int repeatsCount, 
+		std::function<void(const QString& scriptName)> onExecutionStarted, 
+		std::function<void(const QString&)> onOutput, 
+		std::function<void(const QString&)> onError, 
+		std::function<void(QProcess::ExitStatus)> onFinish);
 }

@@ -49,6 +49,10 @@ QLabel[styleTag="primaryLabel"] {
     font-size: 14px;
 }
 
+QLabel[styleTag="primaryLabel"][font-size="12"] {
+    font-size: 14px;
+}
+
 QLabel[styleTag="primaryLabel"][state="enabled"] {
     color: #E0E0E0; 
     
@@ -171,21 +175,36 @@ QScrollBar::add-page:vertical {
 }
 
 QCheckBox {
-    color: #E0E0E0;
     font-size: 14px;
     spacing: 8px;
 }
 
-QCheckBox::indicator {
+QCheckBox[state="enabled"] {
+    color: #E0E0E0;
+}
+
+QCheckBox[state="disabled"] {
+    color: #808080;
+}
+
+QCheckBox[align="afterLabel"] {
+    left: 80px;
+}
+
+QCheckBox[state="enabled"]::indicator {
     border: 1px solid #13FC13;
 }
 
-QCheckBox::indicator:checked,
-QCheckBox::indicator:checked:hover {
+QCheckBox[state="disabled"]::indicator {
+    border: 1px solid #4D4D4D;
+}
+
+QCheckBox[state="enabled"]::indicator:checked,
+QCheckBox[state="enabled"]::indicator:checked:hover {
     background-color: #15FC13;
 }
 
-QCheckBox::indicator:unchecked:hover {
+QCheckBox[state="enabled"]::indicator:unchecked:hover {
     background-color: #262626;
 }
 
@@ -196,6 +215,10 @@ QComboBox[styleTag="primaryComboBox"] {
     height: 30px;
     font-family: "Cairo"; 
     border: none;
+}
+
+QComboBox[styleTag="primaryComboBox"][align="afterName"] {
+    left: 78px;
 }
 
 QComboBox[styleTag="primaryComboBox"][state="enabled"] {
@@ -263,6 +286,11 @@ QSpinBox[state="enabled"] {
     border-radius: 5px;
     height: 30;
     width: 200;
+}
+
+QSpinBox[state="disabled"] {
+    background-color: #4D4D4D;
+    color: #808080;
 }
 
 QMessageBox {
