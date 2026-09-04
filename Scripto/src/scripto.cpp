@@ -11,15 +11,39 @@
 #include <qobject.h>
 #include <functional>
 #include <qtimer.h>
+#include <queue>
 
 #include "scripto.h"
 
 namespace Scripto
 {
 #pragma region Globals
+
+	// experiment
+	struct Schedule
+	{
+		QString scriptName;
+		QDateTime placedTime;
+		QDateTime executionTime;
+		int repeatCounts = 0;
+	};
+
+	struct ScheduleCompare
+	{
+		bool operator()(const Schedule& a, const Schedule& b) const
+		{
+			return a.executionTime < b.executionTime;
+		}
+	};
+
+#define MAX_SCHEDULE_TIMER_TIME 6*60*60*1000 // 6 Hours in milliseconds
+
 	QMap<QString, Script> _scripts;
 	QMap<long long, QProcess*> _runningProcesses;
 	QMap<long long, QProcess*> _scheduledScripts;
+
+	//std::priority_queue < Schedule, std::vector<Schedule>, ScheduleCompare> _storedSchedules;
+	//QList<QTimer*> _scheduledTimers;
 
 	std::atomic<int> _onNewScriptAddedCallbacksCounter = 0;
 	std::atomic<int> _onScriptRemovedCallbacksCounter = 0;
@@ -407,6 +431,7 @@ namespace Scripto
 			if (onFinish)
 				QObject::connect(process, &QProcess::finished, [=] {
 					onFinish(process->exitStatus());
+					_runningProcesses.remove(process->processId());
 					process->deleteLater();
 				});
 			QObject::connect(process, &QProcess::errorOccurred, [=](QProcess::ProcessError err) {
@@ -497,6 +522,20 @@ namespace Scripto
 				});
 
 		return true;
+	}
+
+	bool ScheduleScript(const QString& scriptName, long long afterPeriod, bool repeat, int repeatsCount)
+	{
+		if (!IsScriptAvalible(scriptName))
+			return false;
+
+		if (afterPeriod < 0)
+			return false;
+
+		if (afterPeriod < MAX_SCHEDULE_TIMER_TIME)
+		{
+
+		}
 	}
 
 	bool WriteInputToProcess(long long processID, const QString& input)

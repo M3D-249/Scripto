@@ -107,11 +107,11 @@ namespace ScriptoApp
 		connect(box, &ScriptoMsgBox::Confirmed, this, [=] {
 			if (Scripto::RemoveScript(scriptName))
 			{
-				QMessageBox::information(this, "Notification", "Script Removed Successfully.", QMessageBox::Ok);
+				//QMessageBox::information(this, "Notification", "Script Removed Successfully.", QMessageBox::Ok);
 				close();
 			}
 			else
-				QMessageBox::information(this, "Notification", "Failed to Remove Script!", QMessageBox::Ok);
+				//QMessageBox::information(this, "Notification", "Failed to Remove Script!", QMessageBox::Ok);
 			_scriptNameLineEdit->setText("");
 		});
 		box->show();

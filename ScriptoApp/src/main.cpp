@@ -7,9 +7,9 @@ int main(int argc, char** argv)
 {
 	QApplication app(argc, argv);
 	Scripto::Init("Scripto", "M3D-249");
+	
 	ScriptoApp::ScriptoMainWindow* mainwindow = new ScriptoApp::ScriptoMainWindow;
-	ScriptoApp::SchedulerWindow scheduler;
-	scheduler.show();
+	mainwindow->show();
 
 	return app.exec();
 }

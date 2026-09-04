@@ -28,7 +28,7 @@ ScriptoMsgBox::ScriptoMsgBox(QWidget* parent)
 		_msg->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		_msg->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		_msg->setMinimumHeight(100);
-		_msg->setMinimumWidth(380);
+		_msg->setMinimumWidth(370);
 		_msg->setProperty("styleTag", "primaryTextArea");
 		_msg->setProperty("state", "enabled");
 

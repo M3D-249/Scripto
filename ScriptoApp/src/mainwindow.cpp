@@ -24,7 +24,7 @@ namespace ScriptoApp
 	{
 		SetupUi();
 
-		auto hotkey = new QHotkey(QKeySequence("Ctrl+Shift+P"), true);
+		auto hotkey = new QHotkey(QKeySequence("Ctrl+Shift+R"), true);
 		QObject::connect(hotkey, &QHotkey::activated, [this] {
 			if (isVisible())
 				SetFocus();
@@ -100,9 +100,11 @@ namespace ScriptoApp
 			this->_newScriptDialog->show(); // TODO: add pop
 		});
 
-		connect(_scheduleScriptShortcut, &QShortcut::activated, this, [this] {
-			this->_scheduler->show(); // TODO: add pop in animation
-		});
+		// needs some work but Iam too lazy fornow
+		//connect(_scheduleScriptShortcut, &QShortcut::activated, this, [this] {
+		//	this->_scheduler->show(); // TODO: add pop in animation
+		//});
+
 		connect(_removeScriptDialogShortcut, &QShortcut::activated, this, [this] {
 			this->_removeScriptDialog->ShowFadeIn(); // TODO: add pop in animation
 		});

@@ -46,7 +46,7 @@ namespace ScriptoApp
 		_closeBtn->setFixedHeight(25);
 		_closeBtn->setFixedWidth(25);
 		QPoint terminalGlobalCord = this->mapToGlobal(QPoint(0, 0));
-		_closeBtn->move(terminalGlobalCord.x() + this->_width - 60, terminalGlobalCord.y() + 15);
+		_closeBtn->move(terminalGlobalCord.x() + this->_width - 57, terminalGlobalCord.y() + 15);
 		_closeBtn->setAttribute(Qt::WA_DeleteOnClose);
 
 		// terminal output
@@ -67,7 +67,7 @@ namespace ScriptoApp
 		_inputLineEdit = new QLineEdit(this);
 		_inputLineEdit->setFixedHeight(30);
 		_inputLineEdit->setMinimumWidth(310);
-		_inputLineEdit->setPlaceholderText("Input Args...");
+		_inputLineEdit->setPlaceholderText("");
 		_inputLineEdit->setProperty("styleTag", "primaryLineEdit");
 		_inputLineEdit->setProperty("state", "enabled");
 
@@ -95,7 +95,6 @@ namespace ScriptoApp
 	{
 		//PrintSuccess(QString("Starting Script: %1").arg(scriptName));
 		QStringList storedScripts = Scripto::GetStoredScriptsNames();
-		qDebug() << storedScripts;
 		if (!storedScripts.contains(scriptName))
 		{
 			PrintError("Script not found!");

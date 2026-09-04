@@ -38,14 +38,6 @@ namespace Scripto
 		RunPolicy runPolicy;
 	};
 
-	// TODO: Make logs for scripts executions
-	//struct Schedule
-	//{
-	//	const QDateTime placedTime = QDateTime::currentDateTime();
-	//	QString scriptName;
-	//	QDateTime targetTime;
-	//};
-
 	// public API
 	QString SCRIPTO_API DataDirectory();
 	QString SCRIPTO_API ConfigFilePath();
@@ -83,6 +75,8 @@ namespace Scripto
 
 	/* returns the process id on success and returns SCRIPTO_ERROR on failure */
 	long long SCRIPTO_API RunScript(const QString& scriptName, std::function<void(const QString&)> onOutput, std::function<void(const QString&)> onError, std::function<void(QProcess::ExitStatus)> onFinish);
+	
+	// bad idea : [Dbrecated]
 	/* schedules a script to be run on a given date */
 	bool SCRIPTO_API ScheduleScript(const QString& name, const QDateTime& targetDate,
 		bool repeat, int repeatsCount,
@@ -97,4 +91,16 @@ namespace Scripto
 		std::function<void(const QString&)> onOutput, 
 		std::function<void(const QString&)> onError, 
 		std::function<void(QProcess::ExitStatus)> onFinish);
+
+
+	
+	// experimental
+	void SCRIPTO_API AssignOnScheduledScriptExecutionStarted(std::function<void(long long processID)> onExecutionStarted);
+
+	bool SCRIPTO_API ScheduleScript(const QString& scriptName, long long afterPeriod, bool repeat = false, int repeatsCount = 0);
+	bool SCRIPTO_API ScheduleScript(const QString& scriptName, QDateTime targetDate, bool repeat = false, int repeatCounts = 0);
+
+	bool AssignProcessStandardOut(long long processID, std::function<void(const QString&)> onOutput);
+	bool AssignProcessOnFinishedCallback(long long processID, std::function<void(const QString&)> onOutput);
+	bool AssignProcessStandardError(long long processID, std::function<void(const QString&)> onOutput);
 }

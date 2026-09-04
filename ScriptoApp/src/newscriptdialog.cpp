@@ -144,6 +144,8 @@ namespace ScriptoApp
 		// inplace script
 		_inplaceCheckBox = new QCheckBox("Inplace Script");
 		_inplaceCheckBox->setCheckState(Qt::Unchecked);
+		_inplaceCheckBox->setProperty("styleTag", "primaryLabel");
+		_inplaceCheckBox->setProperty("state", "enabled");
 
 		// script code
 		_scriptCodeLabel = new QLabel("Script Code");
