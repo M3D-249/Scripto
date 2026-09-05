@@ -2,7 +2,7 @@
 
 
 ### Scripto
-- a simple tool that to handle scripts execution built using C++ & Qt
+- a simple tool that handles scripts execution built using C++ & Qt
 
 ## Build Requirements
 - Qt v6 (MSVC)
