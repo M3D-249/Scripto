@@ -16,6 +16,8 @@
 #include <qprocess.h>
 
 // macros
+#define SCRIPTO_INIT_SUCCESS 0
+#define SCRIPTO_INSTANCE_ALREADY_RUNNING 1
 #define SCRIPTO_ERROR -1
 #define SCRIPTO_INVALID_PROCESS_ID -2
 
@@ -62,7 +64,7 @@ namespace Scripto
 	void SCRIPTO_API unsetOnNewScriptAddedCallback(int id);
 	void SCRIPTO_API unsetOnScriptRemovedCallback(int id);
 
-	void SCRIPTO_API Init(const QString& appName, const QString& companyName);
+	void SCRIPTO_API Init();
 
 	int SCRIPTO_API LoadScripts();
 	QStringList SCRIPTO_API GetStoredScriptsNames();

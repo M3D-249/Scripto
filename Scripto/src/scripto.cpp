@@ -12,6 +12,7 @@
 #include <functional>
 #include <qtimer.h>
 #include <queue>
+#include <qsharedmemory.h>
 
 #include "scripto.h"
 
@@ -36,7 +37,7 @@ namespace Scripto
 		}
 	};
 
-#define MAX_SCHEDULE_TIMER_TIME 6*60*60*1000 // 6 Hours in milliseconds
+// #define MAX_SCHEDULE_TIMER_TIME 6*60*60*1000 // 6 Hours in milliseconds
 
 	QMap<QString, Script> _scripts;
 	QMap<long long, QProcess*> _runningProcesses;
@@ -75,10 +76,10 @@ namespace Scripto
 #pragma endregion
 
 #pragma region Initialization
-	void Init(const QString& appName, const QString& orgName)
+	void Init()
 	{
-		QCoreApplication::setApplicationName(appName);
-		QCoreApplication::setOrganizationDomain(orgName);
+		QCoreApplication::setApplicationName("Scripto");
+		QCoreApplication::setOrganizationDomain("M3D-249");
 		LoadScripts();
 	}
 #pragma endregion
@@ -524,7 +525,7 @@ namespace Scripto
 		return true;
 	}
 
-	bool ScheduleScript(const QString& scriptName, long long afterPeriod, bool repeat, int repeatsCount)
+	/*bool ScheduleScript(const QString& scriptName, long long afterPeriod, bool repeat, int repeatsCount)
 	{
 		if (!IsScriptAvalible(scriptName))
 			return false;
@@ -536,7 +537,7 @@ namespace Scripto
 		{
 
 		}
-	}
+	}*/
 
 	bool WriteInputToProcess(long long processID, const QString& input)
 	{

@@ -45,6 +45,7 @@ namespace ScriptoApp
 		const int _height = 450;
 		QPoint _dragOffset;
 
+		// TODO: add checkbox for wether a script should start a terminal session
 		// UI
 		QScreen* _screen;
 		QLabel* _title;

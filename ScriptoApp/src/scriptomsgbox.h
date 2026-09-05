@@ -10,6 +10,7 @@
 
 namespace ScriptoApp
 {
+	// NOTE: derive from QMessageBox and do SCRIPTO_WIDGET_INIT will be better
 	class ScriptoMsgBox : public QWidget
 	{
 		Q_OBJECT

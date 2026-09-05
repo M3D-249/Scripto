@@ -74,6 +74,9 @@
     <ClInclude Include="src\removescriptdialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\themes\dark.qss" />
@@ -93,10 +96,18 @@
     <Image Include="resources\icons\cross_filled.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="resources\icons\app_icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\scriptomsgbox.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
