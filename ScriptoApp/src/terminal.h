@@ -74,5 +74,7 @@ namespace ScriptoApp
 		QLineEdit* _inputLineEdit;
 		QLabel* _inputLabel;
 		QPoint _dragOffset;
+
+		QShortcut* _escShortcut;
 	};
 }

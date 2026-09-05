@@ -313,6 +313,7 @@ namespace ScriptoApp
 
 	void SchedulerWindow::onCancelButtonPressed()
 	{
+		// TODO: complete -> add new func ClearClose
 		this->hide();
 		_scriptNameLineEdit->clear();
 		_targetDateEdit->clear();

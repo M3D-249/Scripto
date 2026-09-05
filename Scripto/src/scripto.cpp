@@ -447,7 +447,7 @@ namespace Scripto
 					qDebug() << "script working dir doesn't exist please update. Script Name: " << script.name << ", Working Dir: " << script.workingDir;
 				
 			qDebug() << "Started Running Script: " << name;
-			process->start(cmd, args.isEmpty() ? QStringList{} : QStringList{ args });
+			process->start(cmd, args.isEmpty() ? QStringList{} : QStringList{ args }); // TODO: make an option to start a detached script
 
 			_runningProcesses[process->processId()] = process;
 			return process->processId();

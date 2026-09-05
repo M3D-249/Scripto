@@ -3,6 +3,7 @@
 #include <qpropertyanimation.h>
 #include <qstringlist.h>
 #include <qtimer.h>
+#include <qshortcut.h>
 
 #include "terminal.h"
 
@@ -89,6 +90,11 @@ namespace ScriptoApp
 		connect(_closeBtn, &QPushButton::pressed, this, [this] {
 			ShutDown();
 		});;
+
+		_escShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
+		connect(_escShortcut, &QShortcut::activated, this, [this] {
+			this->ShutDown();
+		});
 	}
 
 	void TerminalWindow::RunScript(const QString& scriptName)
@@ -147,6 +153,9 @@ namespace ScriptoApp
 			_closeBtn->show();
 			_closeBtn->activateWindow();
 		}
+
+		this->setFocusPolicy(Qt::StrongFocus);
+		this->setFocus();
 	}
 
 	void TerminalWindow::Print(const QString& line, const QColor& color)

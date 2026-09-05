@@ -231,6 +231,19 @@ namespace ScriptoApp
 		UpdateSaveBtnState();
 	}
 
+	void NewScriptDialogWindow::ClearClose()
+	{
+		this->hide();
+		_scriptNameLineEdit->setText("");
+		_scriptPathLineEdit->setText("");
+		_scriptWorkingDirLineEdit->setText("");
+		_scriptCodeTextEdit->setPlainText("");
+		_scriptNameStatusLabel->setText("");
+		_scriptPathStatusLabel->setText("");
+		_scriptWorkingDirStatusLabel->setText("");
+		_inplaceCheckBox->setCheckState(Qt::Unchecked);
+	}
+
 	void NewScriptDialogWindow::onScriptNameChanged(const QString& newName)
 	{
 		QString name = newName.trimmed();
@@ -365,16 +378,12 @@ namespace ScriptoApp
 			Scripto::AddScript(scriptName, path, workingDir, type, Scripto::RunPolicy::NormalUser);
 		}
 
-		accept();
+		ClearClose(); // TODO: add animation
 	}
 
 	void NewScriptDialogWindow::onCancelButtonPressed()
 	{
-		this->hide();
-		_scriptNameLineEdit->setText("");
-		_scriptPathLineEdit->setText("");
-		_scriptCodeTextEdit->setPlainText("");
-		_inplaceCheckBox->setCheckState(Qt::Unchecked);
+		ClearClose();
 	}
 
 	void NewScriptDialogWindow::UpdateSaveBtnState()

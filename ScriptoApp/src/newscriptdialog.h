@@ -40,6 +40,8 @@ namespace ScriptoApp
 		SCRIPTO_WIDGET_DRAG_IMPL(_dragOffset)
 	private:
 		SCRIPTO_REFRESH_STYLE_FUNC_DECL
+
+		void ClearClose();
 		
 		const int _width = 500;
 		const int _height = 450;

@@ -135,8 +135,8 @@ namespace ScriptoApp
 		animation->setEasingCurve(QEasingCurve::InCubic);
 		animation->start(QAbstractAnimation::DeleteWhenStopped);
 
-		SetFocus();
 		show();
+		SetFocus();
 	}
 
 	void ScriptoMainWindow::CloseFadeOut()
@@ -183,6 +183,9 @@ namespace ScriptoApp
 
 	void ScriptoMainWindow::SetFocus()
 	{
+		this->setFocusPolicy(Qt::StrongFocus);
+		this->setFocus();
+		_searchBar->setFocusPolicy(Qt::StrongFocus);
 		_searchBar->setFocus();
 	}
 
